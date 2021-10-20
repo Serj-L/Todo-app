@@ -1,1 +1,58 @@
 @import-normalize;
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  /* typography */
+  --family: 'Josefin Sans', sans-serif;
+  --fs-md: 18px;
+  --fw-normal: 400;
+  --fw-bold: 700;
+
+  /* colors */
+  --clr-white: hsl(0, 0%, 98%);
+
+  --clr-blue: hsl(220, 98%, 61%);
+
+  --clr-gray-blue-50: hsl(234, 39%, 85%);
+  --clr-gray-blue-100: hsl(236, 33%, 92%);
+  --clr-gray-blue-200: hsl(233, 11%, 84%);
+  --clr-gray-blue-300: hsl(236, 9%, 61%);
+  --clr-gray-blue-400: hsl(235, 19%, 35%);
+
+  --clr-blue-300: hsl(234, 11%, 52%);
+  --clr-blue-400: hsl(233, 14%, 35%);
+  --clr-blue-500: hsl(237, 14%, 26%);
+  --clr-blue-600: hsl(235, 24%, 19%);
+  --clr-blue-800: hsl(235, 21%, 11%);
+
+  --clr-gradient: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+
+  /* other */
+  --radius: 0.5rem;
+}
+
+body[data-theme='light'] {
+  --clr-text: var(--clr-gray-blue-400);
+  --clr-bg: var(--clr-white);
+
+  --shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+body[data-theme='dark'] {
+  --clr-text: var(--clr-blue-500);
+  --clr-bg: var(--clr-blue-800);
+
+  --shadow: rgba(245, 245, 245, 0.2) 0px 0px 8px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--family);
+  font-size: var(--fs-md);
+  color: var(--clr-text);
+  background-color: var(--clr-bg);
+}

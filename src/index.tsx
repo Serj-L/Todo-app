@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider as ReduxStoreProvider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+
+import App from './App';
+
+import { store } from './store';
 
 import './index.css';
-import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ReduxStoreProvider store={store}>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </ReduxStoreProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
