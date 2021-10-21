@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 
 import { RouteNames } from '../../types/types';
-import { privateRoutes, publicRoutes } from '../../pages/router';
+import { privateRoutes, publicRoutes } from '../router';
 
 interface AppRouterProps {}
 

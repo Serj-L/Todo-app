@@ -12,6 +12,16 @@ export enum RouteNames {
   TODOLIST = '/',
 }
 
+export enum LocalStorageKeys {
+  THEMETYPE = 'TodoAppThemeType',
+  USERAUTHTOKEN = 'TodoAppAuthToken',
+}
+
+export enum ThemeTypes {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
+
 export interface IUserState {
   userId: string;
 }
