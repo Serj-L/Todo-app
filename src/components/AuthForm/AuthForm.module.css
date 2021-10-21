@@ -1,0 +1,15 @@
+.loginLabel,
+.passwordLabel {
+  display: flex;
+  flex-direction: column;
+}
+
+.switcherWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.btn {
+  cursor: pointer;
+}

@@ -8,7 +8,7 @@ export interface IRoute {
 }
 
 export enum RouteNames {
-  LOGIN = '/login',
+  LOGIN = '/auth',
   TODOLIST = '/',
 }
 
@@ -24,6 +24,7 @@ export enum ThemeTypes {
 
 export interface IUserState {
   userId: string;
+  authErrMsg: string;
 }
 
 export interface IUserLoginInput {

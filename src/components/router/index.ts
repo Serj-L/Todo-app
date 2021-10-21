@@ -1,11 +1,11 @@
-import { LoginPage, TodoListPage } from '../../pages';
 import { IRoute, RouteNames } from '../../types/types';
+import { AuthPage, TodoListPage } from '../../pages';
 
 export const publicRoutes: IRoute[] = [
   {
     path: RouteNames.LOGIN,
     exact: true,
-    component: LoginPage,
+    component: AuthPage,
   },
 ];
 

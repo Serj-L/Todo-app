@@ -5,6 +5,7 @@ import { IUserState, IUserLoginInput, IFirebaseLoginResponse, LocalStorageKeys }
 
 const initialState = {
   userId: localStorage.getItem(LocalStorageKeys.USERAUTHTOKEN) || '',
+  authErrMsg: '',
 } as IUserState;
 
 export const userAuthThunk = createAsyncThunk(
@@ -29,15 +30,23 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(userAuthThunk.pending, (state) => {
+      if (state.authErrMsg) {
+        state.authErrMsg = '';
+      }
+    });
     builder.addCase(userAuthThunk.fulfilled, (state, action) => {
       const payload = action.payload as IFirebaseLoginResponse;
 
       state.userId = payload.uid;
       localStorage.setItem(LocalStorageKeys.USERAUTHTOKEN, payload.uid);
+      if (state.authErrMsg) {
+        state.authErrMsg = '';
+      }
     });
     builder.addCase(userAuthThunk.rejected, (state, action) => {
       state.userId = '';
-      console.log(`Ошибка: ${action.payload}`);
+      state.authErrMsg = `Error: ${action.payload}`;
     });
   },
 });

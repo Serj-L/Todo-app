@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { ThemeTypes } from '../../types/types';
-
 import { SunIcon, MoonIcon } from '../../components/index';
 
 import styles from './ThemeSwitcher.module.css';

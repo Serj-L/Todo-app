@@ -1,5 +1,8 @@
 export { default as AppRouter } from './AppRouter/AppRouter';
 export { default as ThemeSwitcher } from './ThemeSwitcher/ThemeSwitcher';
+export { default as CustomCheckbox } from './CustomCheckbox/CustomCheckbox';
+export { default as AuthForm } from './AuthForm/AuthForm';
+export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as MoonIcon } from './Icons/MoonIcon';
 export { default as SunIcon } from './Icons/SunIcon';
 export { default as CrossIcon } from './Icons/CrossIcon';

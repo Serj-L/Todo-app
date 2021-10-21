@@ -1,0 +1,25 @@
+.snackBarWrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 0 6px 6px;
+  background-color: #ffffff;
+  padding: 10px;
+  transition: 0.4s;
+  z-index: 50;
+}
+
+.snackBarWrapper[data-is-open='true'] {
+  top: 0;
+}
+
+.snackBarWrapper[data-is-open='false'] {
+  top: -50%;
+}
+
+.snackBarText {
+  color: #dd3e3e;
+}
