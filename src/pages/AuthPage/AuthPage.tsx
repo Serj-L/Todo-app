@@ -5,6 +5,8 @@ import { userAuthThunk } from '../../store/userSlice';
 import { useAppDispatch } from '../../hooks/redux';
 import { AuthForm } from '../../components/index';
 
+import styles from './AuthPage.module.css';
+
 interface AuthPageProps {}
 
 const AuthPage: FC<AuthPageProps> = () => {
@@ -20,14 +22,14 @@ const AuthPage: FC<AuthPageProps> = () => {
       password: userPassword,
       isSignedForm: isSignedForm,
     };
-
     reduxDispatch(userAuthThunk(data));
   };
   const onSwitchChange = () => setIsSignedForm(!isSignedForm);
   const onLoginChange = (value: string) => setUserLogin(value);
   const onPasswordChange = (value: string) => setUserPassword(value);
+
   return (
-    <>
+    <div className={styles.wrapper}>
       <AuthForm
         onSubmit = {onSubmit}
         onSwitchChange = {onSwitchChange}
@@ -37,7 +39,7 @@ const AuthPage: FC<AuthPageProps> = () => {
         userPassword = {userPassword}
         isSignedForm = {isSignedForm}
       />
-    </>
+    </div>
   );
 };
 

@@ -8,6 +8,8 @@
 :root {
   /* typography */
   --family: 'Josefin Sans', sans-serif;
+  --fs-sx: 14px;
+  --fs-sm: 16px;
   --fs-md: 18px;
   --fw-normal: 400;
   --fw-bold: 700;
@@ -29,24 +31,29 @@
   --clr-blue-600: hsl(235, 24%, 19%);
   --clr-blue-800: hsl(235, 21%, 11%);
 
-  --clr-gradient: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+  --clr-gradient: linear-gradient(135deg, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
 
   /* other */
   --radius: 0.5rem;
+  --radius-input: 0.25rem;
+  --shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  --transition: 0.2s;
 }
 
 body[data-theme='light'] {
   --clr-text: var(--clr-gray-blue-400);
-  --clr-bg: var(--clr-white);
-
-  --shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  --clr-bg: var(--clr-gray-blue-100);
+  --clr-bg-ui: var(--clr-white);
+  --clr-ui: var(--clr-gray-blue-200);
+  --clr-ui-hover: var(--clr-blue-300);
 }
 
 body[data-theme='dark'] {
-  --clr-text: var(--clr-blue-500);
+  --clr-text: var(--clr-gray-blue-200);
   --clr-bg: var(--clr-blue-800);
-
-  --shadow: rgba(245, 245, 245, 0.2) 0px 0px 8px;
+  --clr-bg-ui: var(--clr-blue-500);
+  --clr-ui: var(--clr-gray-blue-400);
+  --clr-ui-hover: var(--clr-gray-blue-300);
 }
 
 body {

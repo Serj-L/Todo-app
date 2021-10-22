@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { CheckIcon } from '../../components/index';
 import styles from './CustomCheckbox.module.css';
 
 interface CustomCheckboxProps {
@@ -22,7 +23,9 @@ const CustomCheckbox: FC<CustomCheckboxProps> = ({
         checked = {isChecked}
         readOnly
       />
-      <label htmlFor="customCheckbox"></label>
+      <label htmlFor="customCheckbox">
+        {isChecked && <div className={styles.checkIconWrapper}><CheckIcon /></div>}
+      </label>
     </>
   );
 };

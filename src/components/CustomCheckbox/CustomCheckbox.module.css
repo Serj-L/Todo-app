@@ -1,53 +1,65 @@
+.checkIconWrapper {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
 .checkBox {
   position: absolute;
   z-index: -1;
   opacity: 0;
 }
 
-.checkBox+label {
-  display: inline-flex;
+.checkBox + label {
+  display: flex;
+  justify-content: center;
   align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--clr-gradient);
+  margin-right: 0.5rem;
   user-select: none;
   cursor: pointer;
-}
-.checkBox+label::before {
-  content: '';
-  display: inline-block;
-  width: 1.5em;
-  height: 1.5em;
-  flex-shrink: 0;
-  flex-grow: 0;
-  border: 2px solid var(--clr-gray-blue-400);
-  border-radius: 50%;
-  margin-right: 0.5em;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 50% 50%;
-}
-.checkBox:checked+label::before {
-  border-color: var(--clr-gradient);
-  background-color: var(--clr-gradient);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+  position: relative;
+  transition: var(--transition);
 }
 
-/* стили при наведении курсора на checkbox */
-.checkBox:not(:disabled):not(:checked)+label:hover::before {
-  border-color: var(--clr-gradient);
+.checkBox + label::before {
+  content: '';
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  border-radius: 50%;
+  background-color:var(--clr-ui);
+  position: absolute;
+  transition: var(--transition);
 }
-/* стили для активного состояния чекбокса (при нажатии на него) */
-.checkBox:not(:disabled):active+label::before {
-  background-color: #b3d7ff;
-  border-color: #b3d7ff;
+
+.checkBox + label::after {
+  content: '';
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  border-radius: 50%;
+  background-color: var(--clr-bg-ui);
+  position: absolute;
+  transition: var(--transition);
 }
-/* стили для чекбокса, находящегося в фокусе */
-.checkBox:focus+label::before {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+
+.checkBox:checked + label::before {
+  background-color: transparent;
 }
-/* стили для чекбокса, находящегося в фокусе и не находящегося в состоянии checked */
+
+.checkBox:checked + label::after {
+  background-color: transparent;
+}
+
+.checkBox:not(:disabled):not(:checked) + label:hover::before {
+  background-color: transparent;
+}
+
 .checkBox:focus:not(:checked)+label::before {
-  border-color: #80bdff;
-}
-/* стили для чекбокса, находящегося в состоянии disabled */
-.checkBox:disabled+label::before {
-  background-color: #e9ecef;
+  background-color: transparent;
 }

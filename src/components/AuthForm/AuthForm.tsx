@@ -1,6 +1,6 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 
-import { CustomCheckbox } from '../index';
+import { CustomCheckbox, EyeIcon, EyeSlashIcon } from '../index';
 
 import styles from './AuthForm.module.css';
 
@@ -24,6 +24,8 @@ const AuthForm: FC<AuthFormProps> = ({
   isSignedForm = false,
 }) => {
   const [isBtnDissabled, setIsBtnDissabled] = useState<boolean>(true);
+  const [passwordInputType, setPasswordInputType] = useState<string>('password');
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (userLogin && userPassword) {
@@ -36,8 +38,11 @@ const AuthForm: FC<AuthFormProps> = ({
   }, [isBtnDissabled, userLogin, userPassword]);
 
   return (
-    <form onSubmit = {(e) => onSubmit(e)}>
-      <h3>AuthForm</h3>
+    <form
+      className={styles.authForm}
+      onSubmit = {(e) => onSubmit(e)}
+    >
+      <h3 className={styles.title}>{isSignedForm ? 'Sign In Form' : 'Log In Form'}</h3>
       <label className={styles.loginLabel}>Login (e-mail): *
         <input
           className={styles.loginInput}
@@ -46,24 +51,54 @@ const AuthForm: FC<AuthFormProps> = ({
           onChange = {(e) => onLoginChange(e.target.value)}
           placeholder='Enter your login'
         />
-        <span className={styles.loginInputError}></span>
       </label>
-      <label className={styles.passwordLabel}>Password (at least 6 chars): *
+      <label
+        className={styles.passwordLabel}
+        htmlFor='passwordInput'
+      >
+          Password (at least 6 chars): *
+      </label>
+      <div className={styles.passwordInputWrapper}>
+        {
+          passwordInputType === 'password'
+            ?
+            <div
+              className={styles.icon}
+              onClick={() => {
+                setPasswordInputType('text');
+                passwordInputRef.current?.focus();
+              }}
+            >
+              <EyeSlashIcon />
+            </div>
+            :
+            <div
+              className={styles.icon}
+              onClick={() => {
+                setPasswordInputType('password');
+                passwordInputRef.current?.focus();
+              }}
+            >
+              <EyeIcon />
+            </div>
+        }
         <input
           className={styles.passwordInput}
-          type="password"
+          type={passwordInputType}
+          id='passwordInput'
+          ref={passwordInputRef}
           value = {userPassword}
           onChange = {(e) => onPasswordChange(e.target.value)}
           placeholder='Enter your password'
         />
-        <span className={styles.passwordInputError}></span>
-      </label>
+      </div>
+      <span className={styles.text}>* required fields</span>
       <div className={styles.switcherWrapper}>
         <CustomCheckbox
           isChecked = {isSignedForm}
           toggleIsChecked = {onSwitchChange}
         />
-        New user registration and Sign In
+        <div className={styles.switcherLabel}>Register and Sign In</div>
       </div>
       <button
         className={styles.btn}
