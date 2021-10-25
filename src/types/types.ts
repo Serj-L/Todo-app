@@ -36,3 +36,19 @@ export interface IUserLoginInput {
 export interface IFirebaseLoginResponse {
   uid: string;
 }
+
+export interface ITodosSlice {
+  todoList: ITodoItem[];
+  updateDb: boolean;
+  isLoading: boolean;
+  isError: boolean;
+}
+export interface ITodoItem {
+  id: string;
+  title: string;
+  isCompleted: boolean;
+}
+export interface ITodoListFirebase {
+  userId: string;
+  todoList: ITodoItem[];
+}

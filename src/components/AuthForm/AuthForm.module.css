@@ -3,16 +3,19 @@
   flex-direction: column;
   flex-grow: 1;
   max-width: 400px;
-  padding: 1.5rem;
+  padding: 1.25rem 0.75rem;
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   background-color: var(--clr-bg-ui);
+  overflow: auto;
 }
 
 .title {
+  color: var(--clr-white);
   text-align: center;
-  margin: 0;
-  padding-bottom: 1rem;
+  padding: 0.75rem 0;
+  margin: -1.25rem -0.75rem 1.25rem;
+  background: var(--clr-gradient);
 }
 
 .text {
@@ -135,4 +138,14 @@
 .btn:not(:disabled):hover::after,
 .btn:not(:disabled):focus::after {
   transform: scale(1);
+}
+
+@media (min-width: 376px) {
+  .authForm {
+    padding: 1.5rem;
+  }
+
+  .title {
+    margin: -1.5rem -1.5rem 1.25rem;
+  }
 }

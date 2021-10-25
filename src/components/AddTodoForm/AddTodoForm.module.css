@@ -1,0 +1,70 @@
+.addTodoFormWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--clr-bg-ui);
+  border-radius: var(--radius);
+  padding: 1.5rem 1rem;
+}
+
+.addTodoFormBtn {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--clr-ui);
+  background-color: transparent;
+  margin-right: 1.2rem;
+  outline: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.addTodoFormBtn:disabled {
+  cursor: default;
+}
+
+.addTodoFormBtn::after {
+  position: absolute;
+  content: "+";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--fs-lg);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  left: -2px;
+  right: 0;
+  top: -2px;
+  bottom: 0;
+  background: var(--clr-gradient);
+  border-radius: 50%;
+  z-index: -1;
+  transform: scale(0);
+  transition: var(--transition) ease-in;
+}
+
+.addTodoFormBtn:not(:disabled):hover,
+.addTodoFormBtn:not(:disabled):focus {
+  color: var(--clr-white);
+}
+
+.addTodoFormBtn:not(:disabled):hover::after,
+.addTodoFormBtn:not(:disabled):focus::after {
+  transform: scale(1);
+}
+
+.todoTitleInput {
+  flex-grow: 1;
+  width: 100%;
+  font-family: var(--family);
+  color: var(--clr-text);
+  font-size: var(--fs-sm);
+  border: none;
+  outline: none;
+  background: var(--clr-bg-ui);
+}
+
+.todoTitleInput::placeholder {
+  color: var(--clr-ui-hover);
+}

@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-import { IUserLoginInput, IFirebaseLoginResponse } from '../types/types';
+import { IUserLoginInput, IFirebaseLoginResponse, ITodoListFirebase } from '../types/types';
 
 export const firebaseApp = initializeApp({
   apiKey: 'AIzaSyDGmhjDViXDcauYtXU6H7BJkmGekgJCfcg',
@@ -28,12 +28,11 @@ export const userAuth = async (data: IUserLoginInput): Promise<IFirebaseLoginRes
   return { uid: user.uid };
 };
 
-/* export const saveFavoritesToDb = async (favorites: IFavoritesFirebase) => {
-  await setDoc(doc(dataBase, 'users', favorites.userId), { favorites: favorites.favorites });
+export const saveTodosToDb = async (todos: ITodoListFirebase) => {
+  await setDoc(doc(dataBase, 'users', todos.userId), { todos: todos.todoList });
 };
 
-export const getFavoritesFromDb = async (userId: string) => {
+export const getTodosFromDb = async (userId: string) => {
   const favorites = await getDoc(doc(dataBase, 'users', userId));
   return favorites.data();
 };
- */
