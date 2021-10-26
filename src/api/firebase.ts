@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-import { IUserLoginInput, IFirebaseLoginResponse, ITodoListFirebase } from '../types/types';
+import { IUserLoginInput, IFirebaseLoginResponse, ITodoListSetToDb, ITodosSortOrderSetToDb, TodosSortOrder } from '../types/types';
 
 export const firebaseApp = initializeApp({
   apiKey: 'AIzaSyDGmhjDViXDcauYtXU6H7BJkmGekgJCfcg',
@@ -25,14 +25,23 @@ export const userAuth = async (data: IUserLoginInput): Promise<IFirebaseLoginRes
     await createUserWithEmailAndPassword(auth, data.userEmail, data.password) :
     await signInWithEmailAndPassword(auth, data.userEmail, data.password);
 
+  if (data.isSignedForm) {
+    setTodosSortOrderToDb({ userId: user.uid, todosSortOrder: TodosSortOrder.ALL });
+  }
+
   return { uid: user.uid };
 };
 
-export const saveTodosToDb = async (todos: ITodoListFirebase) => {
+export const saveTodosToDb = async (todos: ITodoListSetToDb) => {
   await setDoc(doc(dataBase, 'users', todos.userId), { todos: todos.todoList });
 };
 
 export const getTodosFromDb = async (userId: string) => {
-  const favorites = await getDoc(doc(dataBase, 'users', userId));
-  return favorites.data();
+  const todos = await getDoc(doc(dataBase, 'users', userId));
+  return todos.data();
+};
+
+export const setTodosSortOrderToDb = async (sortOrder: ITodosSortOrderSetToDb) => {
+  await setDoc(doc(dataBase, 'users', sortOrder.userId), { todoSortOrder: sortOrder.todosSortOrder });
+
 };

@@ -4,6 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { LocalStorageKeys, ThemeTypes } from './types/types';
 import { RootState } from './store/index';
 import { setUserId } from './store/userSlice';
+import { getTodosFromDbThunk, saveTodosToDbThunk } from './store/todosSlice';
 import { useAppSelector, useAppDispatch } from './hooks/redux';
 import { AppRouter, ThemeSwitcher, SnackBar, UserAvatar } from './components';
 
@@ -13,9 +14,10 @@ import styles from './App.module.css';
 
 function App() {
   const [themeType, setThemeType] = useState<string>(localStorage.getItem(LocalStorageKeys.THEMETYPE) || ThemeTypes.LIGHT);
+  const [userName, setUserName] = useState<string | null>('');
   const { userId, authErrMsg } = useAppSelector((state: RootState) => state.user);
+  const { todoList, updateDb } = useAppSelector((state: RootState) => state.todos);
   const reduxDispatch = useAppDispatch();
-  const user = auth.currentUser;
 
   const toggleThemeType = () => {
     setThemeType(themeType === ThemeTypes.LIGHT ? ThemeTypes.DARK: ThemeTypes.LIGHT);
@@ -35,6 +37,27 @@ function App() {
     }
   }, [themeType]);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        setUserName(user.email);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!userId) return;
+    reduxDispatch(getTodosFromDbThunk(userId));
+  }, [userId, reduxDispatch]);
+
+  useEffect(() => {
+    if (!updateDb) {
+      return;
+    }
+    reduxDispatch(saveTodosToDbThunk({ todoList, userId }));
+  }, [updateDb, todoList, userId, reduxDispatch]);
+
   return (
     <div className={styles.App}>
       <SnackBar
@@ -49,7 +72,7 @@ function App() {
             onClickHandler = {toggleThemeType}
           />
           {userId && <UserAvatar
-            user={user?.email ? user.email : 'User'}
+            user={userName ? userName : 'User'}
             logOut={logOut}/>}
         </div>
       </header>

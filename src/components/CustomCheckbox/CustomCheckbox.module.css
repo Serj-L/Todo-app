@@ -17,8 +17,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
+  width: var(--custom-checkbox-size);
+  height: var(--custom-checkbox-size);;
   border-radius: 50%;
   background: var(--clr-gradient);
   margin-right: 0.5rem;

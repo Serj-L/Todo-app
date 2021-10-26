@@ -5,12 +5,13 @@
   background: var(--clr-bg-ui);
   border-radius: var(--radius);
   padding: 1.5rem 1rem;
+  box-shadow: var(--shadow);
 }
 
 .addTodoFormBtn {
   position: relative;
-  width: 24px;
-  height: 24px;
+  width: var(--custom-checkbox-size);;
+  height: var(--custom-checkbox-size);;
   border-radius: 50%;
   border: 2px solid var(--clr-ui);
   background-color: transparent;
@@ -53,9 +54,11 @@
 .addTodoFormBtn:not(:disabled):focus::after {
   transform: scale(1);
 }
+.addTodoForm {
+  width: 100%;
+}
 
 .todoTitleInput {
-  flex-grow: 1;
   width: 100%;
   font-family: var(--family);
   color: var(--clr-text);

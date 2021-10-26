@@ -39,6 +39,7 @@
   --radius-input: 0.25rem;
   --shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   --transition: 0.2s;
+  --custom-checkbox-size: 24px;
 }
 
 body[data-theme='light'] {

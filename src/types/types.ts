@@ -22,6 +22,11 @@ export enum ThemeTypes {
   DARK = 'dark',
 }
 
+export enum TodosSortOrder {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 export interface IUserState {
   userId: string;
   authErrMsg: string;
@@ -42,13 +47,24 @@ export interface ITodosSlice {
   updateDb: boolean;
   isLoading: boolean;
   isError: boolean;
+  sortOrder: string;
 }
 export interface ITodoItem {
   id: string;
   title: string;
   isCompleted: boolean;
 }
-export interface ITodoListFirebase {
+export interface ITodoListSetToDb {
   userId: string;
   todoList: ITodoItem[];
+}
+
+export interface ITodosGetFromDb {
+  todos: ITodoItem[];
+  todosSortOrder: string;
+}
+
+export interface ITodosSortOrderSetToDb {
+  userId: string;
+  todosSortOrder: string;
 }
