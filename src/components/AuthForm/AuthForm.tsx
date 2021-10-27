@@ -12,6 +12,7 @@ interface AuthFormProps {
   userLogin: string;
   userPassword: string;
   isSignedForm: boolean;
+  isAuthing: boolean;
 }
 
 const AuthForm: FC<AuthFormProps> = ({
@@ -22,6 +23,7 @@ const AuthForm: FC<AuthFormProps> = ({
   userLogin = '',
   userPassword = '',
   isSignedForm = false,
+  isAuthing = false,
 }) => {
   const [isBtnDissabled, setIsBtnDissabled] = useState<boolean>(true);
   const [passwordInputType, setPasswordInputType] = useState<string>('password');
@@ -96,15 +98,16 @@ const AuthForm: FC<AuthFormProps> = ({
       <div className={styles.switcherWrapper}>
         <CustomCheckbox
           isChecked = {isSignedForm}
-          toggleIsChecked = {onSwitchChange}
+          toggleCheckBoxHandler = {onSwitchChange}
         />
         <div className={styles.switcherLabel}>Register and Sign In</div>
       </div>
       <button
         className={styles.btn}
         disabled={isBtnDissabled}
+        onClick = {(e) => e.currentTarget.blur()}
       >
-        {isSignedForm ? 'Sign In' : 'Log In'}
+        {isAuthing ? 'Authing...' : isSignedForm ? 'Sign In' : 'Log In'}
       </button>
     </form>
   );

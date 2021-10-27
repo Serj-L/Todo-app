@@ -29,6 +29,7 @@ export enum TodosSortOrder {
 }
 export interface IUserState {
   userId: string;
+  isAuthing: boolean;
   authErrMsg: string;
 }
 
@@ -47,6 +48,7 @@ export interface ITodosSlice {
   updateDb: boolean;
   isLoading: boolean;
   isError: boolean;
+  todosErrMsg: string;
   sortOrder: string;
 }
 export interface ITodoItem {
@@ -60,11 +62,13 @@ export interface ITodoListSetToDb {
 }
 
 export interface ITodosGetFromDb {
-  todos: ITodoItem[];
-  todosSortOrder: string;
+  todoList: ITodoItem[];
 }
 
 export interface ITodosSortOrderSetToDb {
   userId: string;
+  todosSortOrder: string;
+}
+export interface ITodosSortOrderGetFromDb {
   todosSortOrder: string;
 }

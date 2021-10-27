@@ -3,8 +3,8 @@ import { getAuth, signOut } from 'firebase/auth';
 
 import { LocalStorageKeys, ThemeTypes } from './types/types';
 import { RootState } from './store/index';
-import { setUserId } from './store/userSlice';
-import { getTodosFromDbThunk, saveTodosToDbThunk } from './store/todosSlice';
+import { setUserId, setAuthErrMsg } from './store/userSlice';
+import { getTodosFromDbThunk, saveTodosToDbThunk, setTodosErrMsg } from './store/todosSlice';
 import { useAppSelector, useAppDispatch } from './hooks/redux';
 import { AppRouter, ThemeSwitcher, SnackBar, UserAvatar } from './components';
 
@@ -16,17 +16,20 @@ function App() {
   const [themeType, setThemeType] = useState<string>(localStorage.getItem(LocalStorageKeys.THEMETYPE) || ThemeTypes.LIGHT);
   const [userName, setUserName] = useState<string | null>('');
   const { userId, authErrMsg } = useAppSelector((state: RootState) => state.user);
-  const { todoList, updateDb } = useAppSelector((state: RootState) => state.todos);
+  const { todoList, updateDb, todosErrMsg } = useAppSelector((state: RootState) => state.todos);
   const reduxDispatch = useAppDispatch();
 
   const toggleThemeType = () => {
     setThemeType(themeType === ThemeTypes.LIGHT ? ThemeTypes.DARK: ThemeTypes.LIGHT);
   };
-
-  const logOut = () => {
-    signOut(getAuth());
-    localStorage.removeItem(LocalStorageKeys.USERAUTHTOKEN);
-    reduxDispatch(setUserId(''));
+  const logOut = () => signOut(getAuth());
+  const clearErrMsg = () => {
+    if (authErrMsg) {
+      reduxDispatch(setAuthErrMsg(''));
+    }
+    if (todosErrMsg) {
+      reduxDispatch(setTodosErrMsg(''));
+    }
   };
 
   useEffect(() => {
@@ -41,9 +44,13 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         setUserName(user.email);
+      } else {
+        localStorage.removeItem(LocalStorageKeys.USERAUTHTOKEN);
+        reduxDispatch(setUserId(''));
       }
     });
     return () => unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -61,7 +68,8 @@ function App() {
   return (
     <div className={styles.App}>
       <SnackBar
-        message = {authErrMsg}
+        message = {authErrMsg ? authErrMsg : todosErrMsg ? todosErrMsg : ''}
+        clearMsg={clearErrMsg}
         duration = {8000}
       />
       <header className={styles.header}>

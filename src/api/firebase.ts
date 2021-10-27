@@ -33,15 +33,19 @@ export const userAuth = async (data: IUserLoginInput): Promise<IFirebaseLoginRes
 };
 
 export const saveTodosToDb = async (todos: ITodoListSetToDb) => {
-  await setDoc(doc(dataBase, 'users', todos.userId), { todos: todos.todoList });
+  await setDoc(doc(dataBase, 'users', todos.userId, 'todos', 'todoList'), { todoList: todos.todoList } );
 };
 
 export const getTodosFromDb = async (userId: string) => {
-  const todos = await getDoc(doc(dataBase, 'users', userId));
+  const todos = await getDoc(doc(dataBase, 'users', userId, 'todos', 'todoList'));
   return todos.data();
 };
 
 export const setTodosSortOrderToDb = async (sortOrder: ITodosSortOrderSetToDb) => {
-  await setDoc(doc(dataBase, 'users', sortOrder.userId), { todoSortOrder: sortOrder.todosSortOrder });
+  await setDoc(doc(dataBase, 'users', sortOrder.userId, 'todos', 'todoSortOrder'), { todoSortOrder: sortOrder.todosSortOrder });
+};
 
+export const getTodosSortOrderFromDb = async (userId: string) => {
+  const sortOrder = await getDoc(doc(dataBase, 'users', userId, 'todos', 'todoSortOrder'));
+  return sortOrder.data();
 };

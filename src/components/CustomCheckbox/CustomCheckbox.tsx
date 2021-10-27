@@ -5,12 +5,12 @@ import styles from './CustomCheckbox.module.css';
 
 interface CustomCheckboxProps {
   isChecked?: boolean;
-  toggleIsChecked: () => void;
+  toggleCheckBoxHandler: () => void;
 }
 
 const CustomCheckbox: FC<CustomCheckboxProps> = ({
   isChecked = false,
-  toggleIsChecked,
+  toggleCheckBoxHandler,
 }) => {
 
   return (
@@ -19,11 +19,14 @@ const CustomCheckbox: FC<CustomCheckboxProps> = ({
         className={styles.checkBox}
         id="customCheckbox"
         type="checkbox"
-        onClick = {toggleIsChecked}
         checked = {isChecked}
         readOnly
+
       />
-      <label htmlFor="customCheckbox">
+      <label
+        htmlFor="customCheckbox"
+        onClick = {toggleCheckBoxHandler}
+      >
         {isChecked && <div className={styles.checkIconWrapper}><CheckIcon /></div>}
       </label>
     </>

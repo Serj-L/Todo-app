@@ -3,6 +3,7 @@ export { default as ThemeSwitcher } from './ThemeSwitcher/ThemeSwitcher';
 export { default as CustomCheckbox } from './CustomCheckbox/CustomCheckbox';
 export { default as AuthForm } from './AuthForm/AuthForm';
 export { default as AddTodoForm } from './AddTodoForm/AddTodoForm';
+export { default as TodoList } from './TodoList/TodoList';
 export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as UserAvatar } from './UserAvatar/UserAvatar';
 export { default as MoonIcon } from './Icons/MoonIcon';

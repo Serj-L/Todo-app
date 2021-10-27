@@ -5,6 +5,7 @@ import { IUserState, IUserLoginInput, IFirebaseLoginResponse, LocalStorageKeys }
 
 const initialState = {
   userId: localStorage.getItem(LocalStorageKeys.USERAUTHTOKEN) || '',
+  isAuthing: false,
   authErrMsg: '',
 } as IUserState;
 
@@ -28,9 +29,14 @@ const userSlice = createSlice({
     setUserId(state, action: PayloadAction<string>) {
       state.userId = action.payload;
     },
+    setAuthErrMsg(state, action: PayloadAction<string>) {
+      state.authErrMsg = (action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(userAuthThunk.pending, (state) => {
+      state.isAuthing = true;
+
       if (state.authErrMsg) {
         state.authErrMsg = '';
       }
@@ -40,16 +46,19 @@ const userSlice = createSlice({
 
       state.userId = payload.uid;
       localStorage.setItem(LocalStorageKeys.USERAUTHTOKEN, payload.uid);
+      state.isAuthing = false;
+
       if (state.authErrMsg) {
         state.authErrMsg = '';
       }
     });
     builder.addCase(userAuthThunk.rejected, (state, action) => {
       state.userId = '';
+      state.isAuthing = false;
       state.authErrMsg = `Error: ${action.payload}`;
     });
   },
 });
 
-export const { setUserId } = userSlice.actions;
+export const { setUserId, setAuthErrMsg } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
 
+import { RootState } from '../../store/index';
 import { IUserLoginInput } from '../../types/types';
 import { userAuthThunk } from '../../store/userSlice';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { AuthForm } from '../../components/index';
 
 import styles from './AuthPage.module.css';
@@ -13,6 +14,7 @@ const AuthPage: FC<AuthPageProps> = () => {
   const [isSignedForm, setIsSignedForm] = useState<boolean>(false);
   const [userLogin, setUserLogin] = useState<string>('');
   const [userPassword, setUserPassword] = useState<string>('');
+  const { isAuthing } = useAppSelector((state: RootState) => state.user);
   const reduxDispatch = useAppDispatch();
 
   const onSubmit = (e: React.FormEvent) => {
@@ -38,6 +40,7 @@ const AuthPage: FC<AuthPageProps> = () => {
         userLogin = {userLogin}
         userPassword = {userPassword}
         isSignedForm = {isSignedForm}
+        isAuthing = {isAuthing}
       />
     </div>
   );

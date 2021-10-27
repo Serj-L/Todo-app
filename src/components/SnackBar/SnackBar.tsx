@@ -4,11 +4,13 @@ import styles from './SnackBar.module.css';
 
 interface SnackBarProps {
   message: string;
+  clearMsg: () => void;
   duration?: number;
 }
 
 const SnackBar: FC<SnackBarProps> = ({
   message,
+  clearMsg,
   duration = 6000,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -20,8 +22,9 @@ const SnackBar: FC<SnackBarProps> = ({
     setIsOpen(true);
     setTimeout(() => {
       setIsOpen(false);
+      clearMsg();
     }, duration);
-  }, [duration, message]);
+  }, [message, clearMsg, duration]);
 
   return (
     <div

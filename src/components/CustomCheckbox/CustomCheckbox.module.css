@@ -60,6 +60,6 @@
   background-color: transparent;
 }
 
-.checkBox:focus:not(:checked)+label::before {
+/* .checkBox:focus:not(:checked)+label::before {
   background-color: transparent;
-}
+} */

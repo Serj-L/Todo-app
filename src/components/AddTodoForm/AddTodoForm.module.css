@@ -1,4 +1,4 @@
-.addTodoFormWrapper {
+.addTodoForm {
   display: flex;
   align-items: center;
   width: 100%;
@@ -54,9 +54,7 @@
 .addTodoFormBtn:not(:disabled):focus::after {
   transform: scale(1);
 }
-.addTodoForm {
-  width: 100%;
-}
+
 
 .todoTitleInput {
   width: 100%;
