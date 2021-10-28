@@ -29,7 +29,7 @@ const AddTodoForm: FC<AddTodoFormProps> = ({
         type="text"
         value = {todoTitle}
         onChange = {(e) => onTitleChange(e.target.value)}
-        placeholder='Create a new todo ...'
+        placeholder='Create a new todo...'
       />
     </form>
   );

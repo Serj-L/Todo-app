@@ -69,25 +69,31 @@ const todosSlice = createSlice({
       state.todoList.push(action.payload);
       state.updateDb = true;
     },
-    toggleTodoComplete(state, action: PayloadAction<{ id: string }>) {
-      state.todoList = state.todoList.map(item => {
-        return item.id === action.payload.id ? { ...item, isCompleted: !item.isCompleted } : item;
+    toggleTodoComplete(state, action: PayloadAction<{ todoId: string }>) {
+      state.todoList = state.todoList.map(todo => {
+        return todo.id === action.payload.todoId ? { ...todo, isCompleted: !todo.isCompleted } : todo;
       });
       state.updateDb = true;
     },
-    deleteTodo(state, action: PayloadAction<{ id: string }>) {
-      state.todoList = state.todoList.filter(item => item.id !== action.payload.id);
+    editTodo(state, action: PayloadAction<{ todoId: string, todoTitle: string}>) {
+      state.todoList = state.todoList.map(todo => {
+        return todo.id === action.payload.todoId ? { ...todo, title: action.payload.todoTitle } : todo;
+      });
+      state.updateDb = true;
+    },
+    deleteTodo(state, action: PayloadAction<{ todoId: string }>) {
+      state.todoList = state.todoList.filter(todo => todo.id !== action.payload.todoId);
       state.updateDb = true;
     },
     deleteCompletedTodo(state) {
-      state.todoList = state.todoList.filter(item => item.isCompleted === true);
+      state.todoList = state.todoList.filter(todo => todo.isCompleted === false);
       state.updateDb = true;
     },
-    setTodosSortOrder(state, action: PayloadAction<string>) {
-      state.sortOrder = (action.payload);
+    setTodosSortOrder(state, action: PayloadAction<{sortOrder: string}>) {
+      state.sortOrder = (action.payload.sortOrder);
     },
-    setTodosErrMsg(state, action: PayloadAction<string>) {
-      state.todosErrMsg = (action.payload);
+    setTodosErrMsg(state, action: PayloadAction<{todosErrMsg: string}>) {
+      state.todosErrMsg = (action.payload.todosErrMsg);
     },
   },
   extraReducers: (builder) => {
@@ -158,7 +164,6 @@ const todosSlice = createSlice({
       }
     });
     builder.addCase(setTodosSortOrderToDbThunk.fulfilled, (state) => {
-      console.log('Todos sort order was update');
     });
     builder.addCase(setTodosSortOrderToDbThunk.rejected, (state, action) => {
       state.isError = true;
@@ -167,5 +172,5 @@ const todosSlice = createSlice({
   },
 });
 
-export const { addTodo, deleteTodo, deleteCompletedTodo, toggleTodoComplete, setTodosSortOrder, setTodosErrMsg } = todosSlice.actions;
+export const { addTodo, deleteTodo, deleteCompletedTodo, editTodo, toggleTodoComplete, setTodosSortOrder, setTodosErrMsg } = todosSlice.actions;
 export default todosSlice.reducer;

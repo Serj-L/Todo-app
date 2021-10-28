@@ -21,7 +21,6 @@
   height: var(--custom-checkbox-size);;
   border-radius: 50%;
   background: var(--clr-gradient);
-  margin-right: 0.5rem;
   user-select: none;
   cursor: pointer;
   position: relative;

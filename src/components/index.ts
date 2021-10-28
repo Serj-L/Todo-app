@@ -6,6 +6,8 @@ export { default as AddTodoForm } from './AddTodoForm/AddTodoForm';
 export { default as TodoList } from './TodoList/TodoList';
 export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as UserAvatar } from './UserAvatar/UserAvatar';
+export { default as Modal } from './Modal/Modal';
+export { default as Loader } from './Loader/Loader';
 export { default as MoonIcon } from './Icons/MoonIcon';
 export { default as SunIcon } from './Icons/SunIcon';
 export { default as CrossIcon } from './Icons/CrossIcon';

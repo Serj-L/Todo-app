@@ -26,7 +26,7 @@ export const userAuth = async (data: IUserLoginInput): Promise<IFirebaseLoginRes
     await signInWithEmailAndPassword(auth, data.userEmail, data.password);
 
   if (data.isSignedForm) {
-    setTodosSortOrderToDb({ userId: user.uid, todosSortOrder: TodosSortOrder.ALL });
+    setTodosSortOrderToDb({ userId: user.uid, sortOrder: TodosSortOrder.ALL });
   }
 
   return { uid: user.uid };
@@ -42,10 +42,10 @@ export const getTodosFromDb = async (userId: string) => {
 };
 
 export const setTodosSortOrderToDb = async (sortOrder: ITodosSortOrderSetToDb) => {
-  await setDoc(doc(dataBase, 'users', sortOrder.userId, 'todos', 'todoSortOrder'), { todoSortOrder: sortOrder.todosSortOrder });
+  await setDoc(doc(dataBase, 'users', sortOrder.userId, 'todos', 'todosSortOrder'), { todosSortOrder: sortOrder.sortOrder });
 };
 
 export const getTodosSortOrderFromDb = async (userId: string) => {
-  const sortOrder = await getDoc(doc(dataBase, 'users', userId, 'todos', 'todoSortOrder'));
+  const sortOrder = await getDoc(doc(dataBase, 'users', userId, 'todos', 'todosSortOrder'));
   return sortOrder.data();
 };

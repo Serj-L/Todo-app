@@ -10,8 +10,8 @@
 
 .addTodoFormBtn {
   position: relative;
-  width: var(--custom-checkbox-size);;
-  height: var(--custom-checkbox-size);;
+  width: calc(var(--custom-checkbox-size) + 2px);
+  height: calc(var(--custom-checkbox-size) + 2px);
   border-radius: 50%;
   border: 2px solid var(--clr-ui);
   background-color: transparent;

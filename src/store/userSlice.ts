@@ -26,11 +26,11 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserId(state, action: PayloadAction<string>) {
-      state.userId = action.payload;
+    setUserId(state, action: PayloadAction<{userId: string}>) {
+      state.userId = action.payload.userId;
     },
-    setAuthErrMsg(state, action: PayloadAction<string>) {
-      state.authErrMsg = (action.payload);
+    setAuthErrMsg(state, action: PayloadAction<{authErrMsg: string}>) {
+      state.authErrMsg = (action.payload.authErrMsg);
     },
   },
   extraReducers: (builder) => {

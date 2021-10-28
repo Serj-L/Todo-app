@@ -9,7 +9,7 @@ interface CrossIconProps {
 const CrossIcon: FC<CrossIconProps> = ({
   width = 18,
   height = 18,
-  color = '#494C6B',
+  color = 'currentColor',
 
 }) => {
   return (

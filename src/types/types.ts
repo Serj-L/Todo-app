@@ -27,6 +27,12 @@ export enum TodosSortOrder {
   ACTIVE = 'active',
   COMPLETED = 'completed',
 }
+
+export enum ActionsWithTodos {
+  DELETE = 'Delete',
+  EDIT = 'Edit',
+  CLRCOMPLETED = 'Clear completed'
+}
 export interface IUserState {
   userId: string;
   isAuthing: boolean;
@@ -67,7 +73,7 @@ export interface ITodosGetFromDb {
 
 export interface ITodosSortOrderSetToDb {
   userId: string;
-  todosSortOrder: string;
+  sortOrder: string;
 }
 export interface ITodosSortOrderGetFromDb {
   todosSortOrder: string;

@@ -4,7 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { LocalStorageKeys, ThemeTypes } from './types/types';
 import { RootState } from './store/index';
 import { setUserId, setAuthErrMsg } from './store/userSlice';
-import { getTodosFromDbThunk, saveTodosToDbThunk, setTodosErrMsg } from './store/todosSlice';
+import { getTodosFromDbThunk, saveTodosToDbThunk, setTodosErrMsg, getTodosSortOrderDbThunk } from './store/todosSlice';
 import { useAppSelector, useAppDispatch } from './hooks/redux';
 import { AppRouter, ThemeSwitcher, SnackBar, UserAvatar } from './components';
 
@@ -25,10 +25,10 @@ function App() {
   const logOut = () => signOut(getAuth());
   const clearErrMsg = () => {
     if (authErrMsg) {
-      reduxDispatch(setAuthErrMsg(''));
+      reduxDispatch(setAuthErrMsg({ authErrMsg: '' }));
     }
     if (todosErrMsg) {
-      reduxDispatch(setTodosErrMsg(''));
+      reduxDispatch(setTodosErrMsg({ todosErrMsg: '' }));
     }
   };
 
@@ -46,7 +46,7 @@ function App() {
         setUserName(user.email);
       } else {
         localStorage.removeItem(LocalStorageKeys.USERAUTHTOKEN);
-        reduxDispatch(setUserId(''));
+        reduxDispatch(setUserId({ userId: '' }));
       }
     });
     return () => unsubscribe();
@@ -54,8 +54,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      return;
+    }
     reduxDispatch(getTodosFromDbThunk(userId));
+    reduxDispatch(getTodosSortOrderDbThunk(userId));
   }, [userId, reduxDispatch]);
 
   useEffect(() => {

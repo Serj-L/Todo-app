@@ -1,3 +1,114 @@
-.listItemIconWrapper {
+.listWrapper {
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  background-color: var(--clr-bg-ui);
+  margin-top: 1.5rem;
+}
+
+.list{
+  margin: 0;
+  padding: 0;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  list-style-type: none;
+  border-bottom: 1px solid var(--clr-ui);
   cursor: pointer;
+}
+
+.listItemTitle {
+  flex-grow: 1;
+  padding-left: 1.2rem;
+}
+
+.listItem[data-is-completed = 'true'] > .listItemTitle {
+  color: var(--clr-ui-hover);
+  text-decoration: line-through;
+}
+
+.listItemIconWrapper {
+  color: var(--clr-ui-hover);
+  cursor: pointer;
+  transition: calc(var(--transition) / 2);
+}
+
+.listItemIconWrapper[data-is-mobile = 'false'] {
+  visibility: hidden;
+}
+
+.listItemIconWrapper[data-is-mobile = 'true'] {
+  visibility: visible;
+}
+
+.listItem:hover > .listItemIconWrapper[data-is-mobile = 'false'] {
+  visibility: visible;
+}
+
+.listControlsWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0.55rem;
+}
+
+.listControlsCounter {
+  color: var(--clr-ui-hover);
+  min-width: 8rem;
+}
+
+.listControlsSortBtnWrapper[data-is-mobile = 'true'] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  background-color: var(--clr-bg-ui);
+  padding: 1.5rem 1rem;
+  margin-top: 1.5rem;
+
+}
+.listControlsSortBtn,
+.listControlsClrCompletedBtn {
+  font-family: var(--family);
+  font-size: var(--fs-md);
+  color: var(--clr-ui-hover);
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.listControlsSortBtn:hover,
+.listControlsClrCompletedBtn:hover,
+.listControlsSortBtn:focus,
+.listControlsClrCompletedBtn:focus {
+  color: var(--clr-text);
+}
+
+.listControlsSortBtn {
+  text-transform: capitalize;
+}
+
+.listControlsSortBtn:not(:last-child) {
+  margin-right: 0.75rem;
+}
+
+.listControlsSortBtn[data-is-active = 'true'] {
+  color: var(--clr-blue);
+  cursor: default;
+}
+
+.listFooter {
+  color: var(--clr-ui-hover);
+  text-align: center;
+  padding-top: 4rem;
+}
+
+@media (min-width: 330px) {
+  .listControlsWrapper {
+    padding: 1.5rem 1rem;
+  }
 }

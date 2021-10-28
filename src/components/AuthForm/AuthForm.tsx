@@ -51,7 +51,7 @@ const AuthForm: FC<AuthFormProps> = ({
           type="text"
           value = {userLogin}
           onChange = {(e) => onLoginChange(e.target.value)}
-          placeholder='Enter your login'
+          placeholder='Enter your login...'
         />
       </label>
       <label
@@ -91,7 +91,7 @@ const AuthForm: FC<AuthFormProps> = ({
           ref={passwordInputRef}
           value = {userPassword}
           onChange = {(e) => onPasswordChange(e.target.value)}
-          placeholder='Enter your password'
+          placeholder='Enter your password...'
         />
       </div>
       <span className={styles.text}>* required fields</span>
