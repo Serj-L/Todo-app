@@ -8,7 +8,8 @@ import styles from './TodoList.module.css';
 interface TodoListProps {
   todos: ITodoItem[];
   todosSortOrder: string;
-  isMobile?: boolean;
+  isMobile: boolean;
+  isTouchDevice: boolean;
   isDraggable?: boolean;
   toggleCheckBoxHandler: (todoId: string) => void;
   deleteBtnHandler: (todoId: string, todoTitle: string) => void;
@@ -22,7 +23,8 @@ interface TodoListProps {
 const TodoList: FC<TodoListProps> = ({
   todos,
   todosSortOrder,
-  isMobile = false,
+  isMobile,
+  isTouchDevice,
   isDraggable = false,
   toggleCheckBoxHandler,
   deleteBtnHandler,
@@ -189,10 +191,16 @@ const TodoList: FC<TodoListProps> = ({
           :
           null
       }
-      <div
-        className={styles.listFooter}>
-        <span className={styles.listFooterText}>Drag and drop to reorder list</span>
-      </div>
+      {
+        !isTouchDevice
+          ?
+          <div
+            className={styles.listFooter}>
+            <span className={styles.listFooterText}>Drag and drop to reorder list</span>
+          </div>
+          :
+          null
+      }
     </div>
   );
 };

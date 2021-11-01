@@ -6,6 +6,7 @@ import { addTodo, deleteTodo, deleteCompletedTodo, editTodo, toggleTodoComplete,
 import { ActionsWithTodos, ITodoItem } from '../../types/types';
 import { AddTodoForm, TodoList, Modal, Loader } from '../../components/index';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { detectTouchDevice } from '../../components/utils';
 
 import styles from './TodoListPage.module.css';
 
@@ -21,6 +22,7 @@ const TodoListPage: FC<TodoListPageProps> = () => {
   const { userId } = useAppSelector((state: RootState) => state.user);
   const { todoList, isLoading, isError, updateDb, sortOrder } = useAppSelector((state: RootState) => state.todos);
   const reduxDispatch = useAppDispatch();
+  const isTouchDevice = detectTouchDevice();
 
   const onTitleChange = (value: string) => setTodoTitle(value);
   const onSubmit = (e: React.FormEvent) => {
@@ -137,6 +139,7 @@ const TodoListPage: FC<TodoListPageProps> = () => {
             todos = {todoList}
             todosSortOrder = {sortOrder}
             isMobile = {isMobile}
+            isTouchDevice = {isTouchDevice}
             isDraggable = {true}
             toggleCheckBoxHandler = {toggleCheckBoxHandler}
             deleteBtnHandler = {deleteBtnHandler}
