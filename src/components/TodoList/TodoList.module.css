@@ -29,6 +29,10 @@
   text-decoration: line-through;
 }
 
+.listItem[data-is-dragging = 'true'] {
+  visibility: hidden;
+}
+
 .listItemIconWrapper {
   color: var(--clr-ui-hover);
   cursor: pointer;

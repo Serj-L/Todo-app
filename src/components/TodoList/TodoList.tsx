@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, useRef, SyntheticEvent } from 'react';
 
 import { ITodoItem, TodosSortOrder } from '../../types/types';
 import { CustomCheckbox, CrossIcon } from '../index';
@@ -9,24 +9,60 @@ interface TodoListProps {
   todos: ITodoItem[];
   todosSortOrder: string;
   isMobile?: boolean;
+  isDraggable?: boolean;
   toggleCheckBoxHandler: (todoId: string) => void;
   deleteBtnHandler: (todoId: string, todoTitle: string) => void;
   sortBtnHandler: (sortOrderValue: string) => void;
   clrCompletedBtnHandler: () => void;
   editTodoHandler: (todoId: string, todoTitle: string) => void;
+  dragEnterEvent?: (reorderedList: ITodoItem[]) => void;
+  dragEndEvent?: () => void;
 }
 
 const TodoList: FC<TodoListProps> = ({
   todos,
   todosSortOrder,
   isMobile = false,
+  isDraggable = false,
   toggleCheckBoxHandler,
   deleteBtnHandler,
   sortBtnHandler,
   clrCompletedBtnHandler,
   editTodoHandler,
+  dragEnterEvent = () => undefined,
+  dragEndEvent = () => undefined,
 }) => {
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const dragItemIdx = useRef<number | null>(null);
+  const dragItemNode = useRef<HTMLElement | null>(null);
   let activeTodosQuantity = todos.filter(todo => todo.isCompleted === false).length;
+
+  const dragStartHandler = (e: SyntheticEvent<HTMLElement>, itemIdx: number): void => {
+    dragItemNode.current = e.currentTarget;
+    dragItemNode.current.addEventListener('dragend', dragEndHandler);
+    dragItemIdx.current = itemIdx;
+
+    setTimeout(() => {
+      setIsDragging(true);
+    }, 0);
+  };
+
+  const dragEnterHandler = (e: SyntheticEvent<HTMLElement>, targetItemIdx: number) => {
+    if (dragItemNode.current !== e.target) {
+      const reorderedTodoList = JSON.parse(JSON.stringify(todos));
+      reorderedTodoList.splice(targetItemIdx, 0, reorderedTodoList.splice(dragItemIdx.current, 1)[0]);
+      dragItemIdx.current = targetItemIdx;
+      dragEnterEvent(reorderedTodoList);
+    }
+  };
+
+  const dragEndHandler = () => {
+    setIsDragging(false);
+    dragItemIdx.current = null;
+    dragItemNode.current?.removeEventListener('dragend', dragEndHandler);
+    dragItemNode.current = null;
+    dragEndEvent();
+  };
 
   return (
     <div
@@ -34,14 +70,17 @@ const TodoList: FC<TodoListProps> = ({
       <div className={styles.listWrapper}>
         <ul className={styles.list}>
           {
-            todos.map(todo => {
+            todos.map((todo, todoIdx) => {
               return todosSortOrder === TodosSortOrder.ALL || (todosSortOrder === TodosSortOrder.ACTIVE && !todo.isCompleted) || (todosSortOrder === TodosSortOrder.COMPLETED && todo.isCompleted)
                 ?
                 <li
                   key={todo.id}
                   className={styles.listItem}
                   data-is-completed={todo.isCompleted}
-                  draggable={true}
+                  data-is-dragging={isDragging ? dragItemIdx.current === todoIdx : false}
+                  draggable={isDraggable}
+                  onDragStart={isDraggable ? (e) => dragStartHandler(e, todoIdx) : undefined}
+                  onDragEnter={isDraggable ? isDragging ? (e) => dragEnterHandler(e, todoIdx) : undefined : undefined}
                 >
                   <CustomCheckbox
                     isChecked = {todo.isCompleted}

@@ -2,8 +2,8 @@ import React, { FC, useState, useEffect, SyntheticEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { RootState } from '../../store/index';
-import { addTodo, deleteTodo, deleteCompletedTodo, editTodo, toggleTodoComplete, setTodosErrMsg, setTodosSortOrder, setTodosSortOrderToDbThunk } from '../../store/todosSlice';
-import { ActionsWithTodos } from '../../types/types';
+import { addTodo, deleteTodo, deleteCompletedTodo, editTodo, toggleTodoComplete, updateTodoList, uploadTodoListToDb, setTodosErrMsg, setTodosSortOrder, setTodosSortOrderToDbThunk } from '../../store/todosSlice';
+import { ActionsWithTodos, ITodoItem } from '../../types/types';
 import { AddTodoForm, TodoList, Modal, Loader } from '../../components/index';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
@@ -96,6 +96,12 @@ const TodoListPage: FC<TodoListPageProps> = () => {
     setActionTodoId('');
     setIsModalActive(false);
   };
+  const updateTodos = (todoList: ITodoItem[]) => {
+    reduxDispatch(updateTodoList(todoList));
+  };
+  const uploadTodosToDb = () => {
+    reduxDispatch(uploadTodoListToDb());
+  };
 
   useEffect(() => {
     const screenResizeHandler = () => {
@@ -131,11 +137,14 @@ const TodoListPage: FC<TodoListPageProps> = () => {
             todos = {todoList}
             todosSortOrder = {sortOrder}
             isMobile = {isMobile}
+            isDraggable = {true}
             toggleCheckBoxHandler = {toggleCheckBoxHandler}
             deleteBtnHandler = {deleteBtnHandler}
             sortBtnHandler = {sortBtnHandler}
             clrCompletedBtnHandler = {clrCompletedBtnHandler}
             editTodoHandler = {editTodoHandler}
+            dragEnterEvent = {updateTodos}
+            dragEndEvent = {uploadTodosToDb}
           />
           :
           isError

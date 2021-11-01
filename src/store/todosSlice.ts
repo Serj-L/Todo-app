@@ -89,11 +89,17 @@ const todosSlice = createSlice({
       state.todoList = state.todoList.filter(todo => todo.isCompleted === false);
       state.updateDb = true;
     },
+    updateTodoList(state, action: PayloadAction<ITodoItem[]>) {
+      state.todoList = action.payload;
+    },
     setTodosSortOrder(state, action: PayloadAction<{sortOrder: string}>) {
       state.sortOrder = (action.payload.sortOrder);
     },
     setTodosErrMsg(state, action: PayloadAction<{todosErrMsg: string}>) {
       state.todosErrMsg = (action.payload.todosErrMsg);
+    },
+    uploadTodoListToDb(state) {
+      state.updateDb = true;
     },
   },
   extraReducers: (builder) => {
@@ -172,5 +178,15 @@ const todosSlice = createSlice({
   },
 });
 
-export const { addTodo, deleteTodo, deleteCompletedTodo, editTodo, toggleTodoComplete, setTodosSortOrder, setTodosErrMsg } = todosSlice.actions;
+export const {
+  addTodo,
+  deleteTodo,
+  deleteCompletedTodo,
+  editTodo,
+  toggleTodoComplete,
+  updateTodoList,
+  uploadTodoListToDb,
+  setTodosSortOrder,
+  setTodosErrMsg,
+} = todosSlice.actions;
 export default todosSlice.reducer;
