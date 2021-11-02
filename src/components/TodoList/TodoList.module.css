@@ -29,8 +29,13 @@
   text-decoration: line-through;
 }
 
-.listItem[data-is-dragging = 'true'] {
+.listItem[data-is-dragging = 'true']:not([data-is-drag-clone = 'true']) {
   visibility: hidden;
+}
+
+.listItem[data-is-drag-clone = 'true'] {
+  position: fixed;
+  opacity: 0.8;
 }
 
 .listItemIconWrapper {

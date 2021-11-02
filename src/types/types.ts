@@ -78,3 +78,8 @@ export interface ITodosSortOrderSetToDb {
 export interface ITodosSortOrderGetFromDb {
   todosSortOrder: string;
 }
+
+export interface IRectOffsets {
+  xOffset: number;
+  yOffset: number;
+}

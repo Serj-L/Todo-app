@@ -1,6 +1,6 @@
-import { FC, useState, useRef, SyntheticEvent } from 'react';
+import { FC, useState, useRef, SyntheticEvent, TouchEvent } from 'react';
 
-import { ITodoItem, TodosSortOrder } from '../../types/types';
+import { ITodoItem, TodosSortOrder, IRectOffsets } from '../../types/types';
 import { CustomCheckbox, CrossIcon } from '../index';
 
 import styles from './TodoList.module.css';
@@ -35,8 +35,12 @@ const TodoList: FC<TodoListProps> = ({
   dragEndEvent = () => undefined,
 }) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const listContainer = useRef<HTMLUListElement | null>(null);
   const dragItemIdx = useRef<number | null>(null);
   const dragItemNode = useRef<HTMLElement | null>(null);
+  const dragItemNodeClone = useRef<HTMLElement | null>(null);
+  const dragItemRect = useRef<DOMRect | null>(null);
+  const dragItemRectOffsets = useRef<IRectOffsets>({ xOffset: 0, yOffset: 0 });
   let activeTodosQuantity = todos.filter(todo => todo.isCompleted === false).length;
 
   const dragStartHandler = (e: SyntheticEvent<HTMLElement>, itemIdx: number): void => {
@@ -48,7 +52,6 @@ const TodoList: FC<TodoListProps> = ({
       setIsDragging(true);
     }, 0);
   };
-
   const dragEnterHandler = (e: SyntheticEvent<HTMLElement>, targetItemIdx: number) => {
     if (dragItemNode.current !== e.target) {
       const reorderedTodoList = JSON.parse(JSON.stringify(todos));
@@ -57,7 +60,6 @@ const TodoList: FC<TodoListProps> = ({
       dragEnterEvent(reorderedTodoList);
     }
   };
-
   const dragEndHandler = () => {
     setIsDragging(false);
     dragItemIdx.current = null;
@@ -66,11 +68,78 @@ const TodoList: FC<TodoListProps> = ({
     dragEndEvent();
   };
 
+  const onTouchStartHandler = (e: TouchEvent<HTMLElement>, itemIdx: number) => {
+    dragItemNode.current = e.currentTarget;
+    dragItemIdx.current = itemIdx;
+    dragItemRect.current = dragItemNode.current.getBoundingClientRect();
+    dragItemRectOffsets.current.xOffset = e.changedTouches[0].clientX - dragItemRect.current.left;
+    dragItemRectOffsets.current.yOffset = e.changedTouches[0].clientY - dragItemRect.current.top;
+    dragItemNodeClone.current = dragItemNode.current.cloneNode(true) as HTMLElement;
+    dragItemNodeClone.current.setAttribute('data-is-drag-clone', 'true');
+    dragItemNodeClone.current.style.width = `${dragItemRect.current?.width}px`;
+  };
+  const onTouchMoveHandler = (e: TouchEvent<HTMLElement>) => {
+    if (listContainer.current && dragItemNodeClone.current) {
+      setIsDragging(true);
+
+      if (dragItemRectOffsets.current.xOffset && dragItemRectOffsets.current.yOffset) {
+        dragItemNodeClone.current.style.left = `${e.changedTouches[0].clientX - dragItemRectOffsets.current.xOffset}px`;
+        dragItemNodeClone.current.style.top = `${e.changedTouches[0].clientY - dragItemRectOffsets.current.yOffset}px`;
+      } else {
+        if (dragItemRect.current) {
+          dragItemNodeClone.current.style.left = `${e.changedTouches[0].clientX - dragItemRect.current.width / 2}px`;
+          dragItemNodeClone.current.style.top = `${e.changedTouches[0].clientY - dragItemRect.current.height / 2}px`;
+        } else {
+          dragItemNodeClone.current.style.left = `${e.changedTouches[0].clientX}px`;
+          dragItemNodeClone.current.style.top = `${e.changedTouches[0].clientY}px`;
+        }
+      }
+
+      dragItemNodeClone.current.setAttribute('data-is-dragging', 'true');
+      listContainer.current.appendChild<HTMLElement>(dragItemNodeClone.current);
+
+      const todosNodeCollection = listContainer.current.querySelectorAll('li[data-is-dragging=false]');
+
+      todosNodeCollection.forEach(todo => {
+        if (
+          dragItemNodeClone.current && dragItemNodeClone.current.getAttribute('data-order-number') !== todo.getAttribute('data-order-number') &&
+          dragItemNodeClone.current.getBoundingClientRect().top + dragItemNodeClone.current.getBoundingClientRect().height / 2 < todo.getBoundingClientRect().bottom &&
+          dragItemNodeClone.current.getBoundingClientRect().bottom - dragItemNodeClone.current.getBoundingClientRect().height / 2 > todo.getBoundingClientRect().top
+        ) {
+          const targetItemIdx = Number(todo.getAttribute('data-order-number'));
+          const reorderedTodoList = JSON.parse(JSON.stringify(todos));
+
+          reorderedTodoList.splice(targetItemIdx, 0, reorderedTodoList.splice(dragItemIdx.current, 1)[0]);
+          dragItemIdx.current = targetItemIdx;
+          dragEnterEvent(reorderedTodoList);
+        }
+      });
+    }
+  };
+  const onTouchEndHandler = (e: TouchEvent<HTMLElement>) => {
+    setIsDragging(false);
+
+    if (listContainer.current && dragItemNodeClone.current) {
+      listContainer.current.removeChild<HTMLElement>(dragItemNodeClone.current);
+    }
+
+    dragItemNode.current = null;
+    dragItemNodeClone.current = null;
+    dragItemIdx.current = null;
+    dragItemRect.current = null;
+    dragItemRectOffsets.current.xOffset = 0;
+    dragItemRectOffsets.current.yOffset = 0;
+    dragEndEvent();
+  };
+
   return (
     <div
       className={styles.wrapper}>
       <div className={styles.listWrapper}>
-        <ul className={styles.list}>
+        <ul
+          className={styles.list}
+          ref={listContainer}
+        >
           {
             todos.map((todo, todoIdx) => {
               return todosSortOrder === TodosSortOrder.ALL || (todosSortOrder === TodosSortOrder.ACTIVE && !todo.isCompleted) || (todosSortOrder === TodosSortOrder.COMPLETED && todo.isCompleted)
@@ -80,9 +149,13 @@ const TodoList: FC<TodoListProps> = ({
                   className={styles.listItem}
                   data-is-completed={todo.isCompleted}
                   data-is-dragging={isDragging ? dragItemIdx.current === todoIdx : false}
+                  data-order-number={todoIdx}
                   draggable={isDraggable}
-                  onDragStart={isDraggable ? (e) => dragStartHandler(e, todoIdx) : undefined}
-                  onDragEnter={isDraggable ? isDragging ? (e) => dragEnterHandler(e, todoIdx) : undefined : undefined}
+                  onDragStart = {isDraggable ? (e) => dragStartHandler(e, todoIdx) : undefined}
+                  onDragEnter = {isDraggable ? isDragging ? (e) => dragEnterHandler(e, todoIdx) : undefined : undefined}
+                  onTouchStart = {isDraggable && isTouchDevice ? (e) => onTouchStartHandler(e, todoIdx) : undefined}
+                  onTouchMove = {isDraggable && isTouchDevice ? (e) => onTouchMoveHandler(e) : undefined}
+                  onTouchEnd = {isDraggable && isTouchDevice ? (e) => onTouchEndHandler(e) : undefined}
                 >
                   <CustomCheckbox
                     isChecked = {todo.isCompleted}
@@ -191,16 +264,10 @@ const TodoList: FC<TodoListProps> = ({
           :
           null
       }
-      {
-        !isTouchDevice
-          ?
-          <div
-            className={styles.listFooter}>
-            <span className={styles.listFooterText}>Drag and drop to reorder list</span>
-          </div>
-          :
-          null
-      }
+      <div
+        className={styles.listFooter}>
+        <span className={styles.listFooterText}>Drag and drop to reorder list</span>
+      </div>
     </div>
   );
 };
