@@ -114,6 +114,7 @@ const TodoListPage: FC<TodoListPageProps> = () => {
       }
     };
 
+    screenResizeHandler();
     window.addEventListener('resize', screenResizeHandler);
 
     return () => window.removeEventListener('resize', screenResizeHandler);

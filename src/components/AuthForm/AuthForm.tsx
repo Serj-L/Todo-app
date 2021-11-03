@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 
 import { CustomCheckbox, EyeIcon, EyeSlashIcon } from '../index';
+import { detectTouchDevice } from '../utils';
 
 import styles from './AuthForm.module.css';
 
@@ -28,6 +29,7 @@ const AuthForm: FC<AuthFormProps> = ({
   const [isBtnDissabled, setIsBtnDissabled] = useState<boolean>(true);
   const [passwordInputType, setPasswordInputType] = useState<string>('password');
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const isTouchDevice = detectTouchDevice();
 
   useEffect(() => {
     if (userLogin && userPassword) {
@@ -98,6 +100,7 @@ const AuthForm: FC<AuthFormProps> = ({
       <div className={styles.switcherWrapper}>
         <CustomCheckbox
           isChecked = {isSignedForm}
+          isTouchDevice = {isTouchDevice}
           toggleCheckBoxHandler = {onSwitchChange}
         />
         <div className={styles.switcherLabel}>Register and Sign In</div>

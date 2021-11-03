@@ -35,7 +35,9 @@
 
 .listItem[data-is-drag-clone = 'true'] {
   position: fixed;
-  opacity: 0.8;
+  background-color: var(--clr-bg-ui);
+  border-color: transparent;
+  opacity: 0.5;
 }
 
 .listItemIconWrapper {
@@ -48,7 +50,7 @@
   visibility: hidden;
 }
 
-.listItemIconWrapper[data-is-mobile = 'true'] {
+.listItemIconWrapper[data-is-mobile = 'true'][data-is-dragging = 'false'] {
   visibility: visible;
 }
 

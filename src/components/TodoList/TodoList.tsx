@@ -111,16 +111,19 @@ const TodoList: FC<TodoListProps> = ({
 
           reorderedTodoList.splice(targetItemIdx, 0, reorderedTodoList.splice(dragItemIdx.current, 1)[0]);
           dragItemIdx.current = targetItemIdx;
+          dragItemNodeClone.current.setAttribute('data-order-number', `${targetItemIdx}`);
           dragEnterEvent(reorderedTodoList);
         }
       });
     }
   };
   const onTouchEndHandler = (e: TouchEvent<HTMLElement>) => {
-    setIsDragging(false);
-
-    if (listContainer.current && dragItemNodeClone.current) {
-      listContainer.current.removeChild<HTMLElement>(dragItemNodeClone.current);
+    if (isDragging) {
+      if (listContainer.current && dragItemNodeClone.current) {
+        listContainer.current.removeChild<HTMLElement>(dragItemNodeClone.current);
+      }
+      dragEndEvent();
+      setIsDragging(false);
     }
 
     dragItemNode.current = null;
@@ -129,7 +132,6 @@ const TodoList: FC<TodoListProps> = ({
     dragItemRect.current = null;
     dragItemRectOffsets.current.xOffset = 0;
     dragItemRectOffsets.current.yOffset = 0;
-    dragEndEvent();
   };
 
   return (
@@ -151,14 +153,15 @@ const TodoList: FC<TodoListProps> = ({
                   data-is-dragging={isDragging ? dragItemIdx.current === todoIdx : false}
                   data-order-number={todoIdx}
                   draggable={isDraggable}
-                  onDragStart = {isDraggable ? (e) => dragStartHandler(e, todoIdx) : undefined}
-                  onDragEnter = {isDraggable ? isDragging ? (e) => dragEnterHandler(e, todoIdx) : undefined : undefined}
+                  onDragStart = {isDraggable && !isTouchDevice ? (e) => dragStartHandler(e, todoIdx) : undefined}
+                  onDragEnter = {isDraggable && !isTouchDevice ? isDragging ? (e) => dragEnterHandler(e, todoIdx) : undefined : undefined}
                   onTouchStart = {isDraggable && isTouchDevice ? (e) => onTouchStartHandler(e, todoIdx) : undefined}
                   onTouchMove = {isDraggable && isTouchDevice ? (e) => onTouchMoveHandler(e) : undefined}
                   onTouchEnd = {isDraggable && isTouchDevice ? (e) => onTouchEndHandler(e) : undefined}
                 >
                   <CustomCheckbox
                     isChecked = {todo.isCompleted}
+                    isTouchDevice = {isTouchDevice}
                     toggleCheckBoxHandler = {() => toggleCheckBoxHandler(todo.id)}
                   />
                   <span
@@ -169,7 +172,7 @@ const TodoList: FC<TodoListProps> = ({
                   </span>
                   <div
                     className={styles.listItemIconWrapper}
-                    data-is-mobile={isMobile}
+                    data-is-mobile={isTouchDevice}
                     onClick = {() => deleteBtnHandler(todo.id, todo.title)}
                   >
                     <CrossIcon />

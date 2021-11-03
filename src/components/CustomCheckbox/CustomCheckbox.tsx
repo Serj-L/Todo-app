@@ -5,11 +5,13 @@ import styles from './CustomCheckbox.module.css';
 
 interface CustomCheckboxProps {
   isChecked?: boolean;
+  isTouchDevice: boolean;
   toggleCheckBoxHandler: () => void;
 }
 
 const CustomCheckbox: FC<CustomCheckboxProps> = ({
   isChecked = false,
+  isTouchDevice,
   toggleCheckBoxHandler,
 }) => {
 
@@ -17,6 +19,7 @@ const CustomCheckbox: FC<CustomCheckboxProps> = ({
     <>
       <input
         className={styles.checkBox}
+        data-is-touch-device={isTouchDevice}
         id="customCheckbox"
         type="checkbox"
         checked = {isChecked}

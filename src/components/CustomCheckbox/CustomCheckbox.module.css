@@ -55,7 +55,7 @@
   background-color: transparent;
 }
 
-.checkBox:not(:disabled):not(:checked) + label:hover::before {
+.checkBox:not(:disabled):not(:checked):not([data-is-touch-device = 'true']) + label:hover::before {
   background-color: transparent;
 }
 
