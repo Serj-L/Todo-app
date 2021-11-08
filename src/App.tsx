@@ -33,8 +33,6 @@ function App() {
   };
 
   useEffect(() => {
-    document.body.setAttribute('data-theme', themeType);
-
     if (localStorage.getItem(LocalStorageKeys.THEMETYPE) !== themeType) {
       localStorage.setItem(LocalStorageKeys.THEMETYPE, themeType);
     }
@@ -69,25 +67,30 @@ function App() {
   }, [updateDb, todoList, userId, reduxDispatch]);
 
   return (
-    <div className={styles.App}>
-      <SnackBar
-        message = {authErrMsg ? authErrMsg : todosErrMsg ? todosErrMsg : ''}
-        clearMsg={clearErrMsg}
-        duration = {8000}
-      />
-      <header className={styles.header}>
-        <h1 className={styles.headerTitle}>todo</h1>
-        <div className={styles.controlsWrapper}>
-          <ThemeSwitcher
-            themeType = {themeType}
-            onClickHandler = {toggleThemeType}
-          />
-          {userId && <UserAvatar
-            user={userName ? userName : 'User'}
-            logOut={logOut}/>}
-        </div>
-      </header>
-      <AppRouter />
+    <div
+      className={styles.App}
+      data-theme-type = {themeType}
+    >
+      <div className={styles.appContainer}>
+        <SnackBar
+          message = {authErrMsg ? authErrMsg : todosErrMsg ? todosErrMsg : ''}
+          clearMsg={clearErrMsg}
+          duration = {8000}
+        />
+        <header className={styles.header}>
+          <h1 className={styles.headerTitle}>todo</h1>
+          <div className={styles.controlsWrapper}>
+            <ThemeSwitcher
+              themeType = {themeType}
+              onClickHandler = {toggleThemeType}
+            />
+            {userId && <UserAvatar
+              user={userName ? userName : 'User'}
+              logOut={logOut}/>}
+          </div>
+        </header>
+        <AppRouter />
+      </div>
     </div>
   );
 }

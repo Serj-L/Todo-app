@@ -37,6 +37,7 @@ const UserAvatar: FC<UserAvatarProps> = ({
         data-is-active={`${isTooltipActive}`}
       >
         <div className={styles.tooltipHeader}>
+          <span className={styles.tooltipTitle}>User info</span>
           <div
             className={styles.tooltipIconWrapper}
             onClick = {avatarOnClickHandler}

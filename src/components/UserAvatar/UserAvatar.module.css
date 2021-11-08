@@ -38,10 +38,15 @@
 
 .tooltipHeader {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   background: var(--clr-gradient);
   margin: -1rem -1rem 0.5rem;
   padding: 0.5rem;
+}
+
+.tooltipTitle {
+  font-weight: var(--fw-bold);
 }
 
 .tooltipIconWrapper {

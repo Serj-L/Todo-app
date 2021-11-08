@@ -1,6 +1,6 @@
-import { FC, useState, useRef, SyntheticEvent, TouchEvent } from 'react';
+import { FC, useState, useRef, SyntheticEvent, TouchEvent, useEffect } from 'react';
 
-import { ITodoItem, TodosSortOrder, IRectOffsets } from '../../types/types';
+import { ITodoItem, TodosSortOrder, IRectOffsets, ITouchDuration } from '../../types/types';
 import { CustomCheckbox, CrossIcon } from '../index';
 
 import styles from './TodoList.module.css';
@@ -8,7 +8,7 @@ import styles from './TodoList.module.css';
 interface TodoListProps {
   todos: ITodoItem[];
   todosSortOrder: string;
-  isMobile: boolean;
+  isSortControlsExternal: boolean;
   isTouchDevice: boolean;
   isDraggable?: boolean;
   toggleCheckBoxHandler: (todoId: string) => void;
@@ -23,7 +23,7 @@ interface TodoListProps {
 const TodoList: FC<TodoListProps> = ({
   todos,
   todosSortOrder,
-  isMobile,
+  isSortControlsExternal,
   isTouchDevice,
   isDraggable = false,
   toggleCheckBoxHandler,
@@ -41,7 +41,52 @@ const TodoList: FC<TodoListProps> = ({
   const dragItemNodeClone = useRef<HTMLElement | null>(null);
   const dragItemRect = useRef<DOMRect | null>(null);
   const dragItemRectOffsets = useRef<IRectOffsets>({ xOffset: 0, yOffset: 0 });
-  let activeTodosQuantity = todos.filter(todo => todo.isCompleted === false).length;
+  const touchDuration = useRef<ITouchDuration>({
+    touchStartEvtTime: 0,
+    isFirstTouchMoveEvt: true,
+    touchMoveFirstEvtTime: 0,
+    touchMoveStartDelay: 0,
+  });
+  let activeTodosQuantity: number = todos.filter(todo => todo.isCompleted === false).length;
+  const sortOrderControlsMarkup = (
+    <div
+      className={styles.listControlsSortBtnWrapper}
+      data-is-external={isSortControlsExternal}
+      onClick = {(e) => sortBtnHandler((e.target as HTMLButtonElement).id)}
+    >
+      <button
+        className={styles.listControlsSortBtn}
+        id={TodosSortOrder.ALL}
+        data-is-active={todosSortOrder === TodosSortOrder.ALL}
+        disabled={todosSortOrder === TodosSortOrder.ALL}
+      >
+        {TodosSortOrder.ALL}
+      </button>
+      <button
+        className={styles.listControlsSortBtn}
+        id={TodosSortOrder.ACTIVE}
+        data-is-active={todosSortOrder === TodosSortOrder.ACTIVE}
+        disabled={todosSortOrder === TodosSortOrder.ACTIVE}
+      >
+        {TodosSortOrder.ACTIVE}
+      </button>
+      <button
+        className={styles.listControlsSortBtn}
+        id={TodosSortOrder.COMPLETED}
+        data-is-active={todosSortOrder === TodosSortOrder.COMPLETED}
+        disabled={todosSortOrder === TodosSortOrder.COMPLETED}
+      >
+        {TodosSortOrder.COMPLETED}
+      </button>
+    </div>
+  );
+
+  useEffect(() => {
+    if (!isTouchDevice) {
+      return;
+    }
+    document.body.style.overflow = isDragging ? 'hidden' : 'scroll';
+  }, [isDragging, isTouchDevice]);
 
   const dragStartHandler = (e: SyntheticEvent<HTMLElement>, itemIdx: number): void => {
     dragItemNode.current = e.currentTarget;
@@ -69,6 +114,7 @@ const TodoList: FC<TodoListProps> = ({
   };
 
   const onTouchStartHandler = (e: TouchEvent<HTMLElement>, itemIdx: number) => {
+    touchDuration.current.touchStartEvtTime = e.timeStamp;
     dragItemNode.current = e.currentTarget;
     dragItemIdx.current = itemIdx;
     dragItemRect.current = dragItemNode.current.getBoundingClientRect();
@@ -79,6 +125,14 @@ const TodoList: FC<TodoListProps> = ({
     dragItemNodeClone.current.style.width = `${dragItemRect.current?.width}px`;
   };
   const onTouchMoveHandler = (e: TouchEvent<HTMLElement>) => {
+    if (touchDuration.current.isFirstTouchMoveEvt) {
+      touchDuration.current.isFirstTouchMoveEvt = false;
+      touchDuration.current.touchMoveFirstEvtTime = e.timeStamp;
+      touchDuration.current.touchMoveStartDelay = touchDuration.current.touchMoveFirstEvtTime - touchDuration.current.touchStartEvtTime;
+    }
+    if (touchDuration.current.touchMoveStartDelay < 150) {
+      return;
+    }
     if (listContainer.current && dragItemNodeClone.current) {
       setIsDragging(true);
 
@@ -130,8 +184,16 @@ const TodoList: FC<TodoListProps> = ({
     dragItemNodeClone.current = null;
     dragItemIdx.current = null;
     dragItemRect.current = null;
-    dragItemRectOffsets.current.xOffset = 0;
-    dragItemRectOffsets.current.yOffset = 0;
+    dragItemRectOffsets.current = {
+      xOffset: 0,
+      yOffset: 0,
+    };
+    touchDuration.current = {
+      touchStartEvtTime: 0,
+      isFirstTouchMoveEvt: true,
+      touchMoveFirstEvtTime: 0,
+      touchMoveStartDelay: 0,
+    };
   };
 
   return (
@@ -172,7 +234,7 @@ const TodoList: FC<TodoListProps> = ({
                   </span>
                   <div
                     className={styles.listItemIconWrapper}
-                    data-is-mobile={isTouchDevice}
+                    data-is-touch-device={isTouchDevice}
                     onClick = {() => deleteBtnHandler(todo.id, todo.title)}
                   >
                     <CrossIcon />
@@ -188,40 +250,7 @@ const TodoList: FC<TodoListProps> = ({
             {`${activeTodosQuantity} ${activeTodosQuantity > 1 ? 'items left' : 'item left'}`}
           </div>
           {
-            !isMobile
-              ?
-              <div
-                className={styles.listControlsSortBtnWrapper}
-                data-is-mobile={isMobile}
-                onClick = {(e) => sortBtnHandler((e.target as HTMLButtonElement).id)}
-              >
-                <button
-                  className={styles.listControlsSortBtn}
-                  id={TodosSortOrder.ALL}
-                  data-is-active={todosSortOrder === TodosSortOrder.ALL}
-                  disabled={todosSortOrder === TodosSortOrder.ALL}
-                >
-                  {TodosSortOrder.ALL}
-                </button>
-                <button
-                  className={styles.listControlsSortBtn}
-                  id={TodosSortOrder.ACTIVE}
-                  data-is-active={todosSortOrder === TodosSortOrder.ACTIVE}
-                  disabled={todosSortOrder === TodosSortOrder.ACTIVE}
-                >
-                  {TodosSortOrder.ACTIVE}
-                </button>
-                <button
-                  className={styles.listControlsSortBtn}
-                  id={TodosSortOrder.COMPLETED}
-                  data-is-active={todosSortOrder === TodosSortOrder.COMPLETED}
-                  disabled={todosSortOrder === TodosSortOrder.COMPLETED}
-                >
-                  {TodosSortOrder.COMPLETED}
-                </button>
-              </div>
-              :
-              null
+            !isSortControlsExternal ? sortOrderControlsMarkup : null
           }
           <button
             className={styles.listControlsClrCompletedBtn}
@@ -232,44 +261,13 @@ const TodoList: FC<TodoListProps> = ({
         </div>
       </div>
       {
-        isMobile
-          ?
-          <div
-            className={styles.listControlsSortBtnWrapper}
-            data-is-mobile={isMobile}
-            onClick = {(e) => sortBtnHandler((e.target as HTMLButtonElement).id)}
-          >
-            <button
-              className={styles.listControlsSortBtn}
-              id={TodosSortOrder.ALL}
-              data-is-active={todosSortOrder === TodosSortOrder.ALL}
-              disabled={todosSortOrder === TodosSortOrder.ALL}
-            >
-              {TodosSortOrder.ALL}
-            </button>
-            <button
-              className={styles.listControlsSortBtn}
-              id={TodosSortOrder.ACTIVE}
-              data-is-active={todosSortOrder === TodosSortOrder.ACTIVE}
-              disabled={todosSortOrder === TodosSortOrder.ACTIVE}
-            >
-              {TodosSortOrder.ACTIVE}
-            </button>
-            <button
-              className={styles.listControlsSortBtn}
-              id={TodosSortOrder.COMPLETED}
-              data-is-active={todosSortOrder === TodosSortOrder.COMPLETED}
-              disabled={todosSortOrder === TodosSortOrder.COMPLETED}
-            >
-              {TodosSortOrder.COMPLETED}
-            </button>
-          </div>
-          :
-          null
+        isSortControlsExternal ? sortOrderControlsMarkup : null
       }
       <div
         className={styles.listFooter}>
-        <span className={styles.listFooterText}>Drag and drop to reorder list</span>
+        <span className={styles.listFooterText}>
+          {isTouchDevice ? 'Long tap on Todo to drag and drop it and reorder list' : 'Drag and drop to reorder list'}
+        </span>
       </div>
     </div>
   );

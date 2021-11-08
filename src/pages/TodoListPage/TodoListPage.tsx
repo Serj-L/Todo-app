@@ -18,7 +18,7 @@ const TodoListPage: FC<TodoListPageProps> = () => {
   const [actionTodoType, setActionTodoType] = useState<string>('');
   const [actionTodoTitle, setActionTodoTitle] = useState<string>('');
   const [actionTodoId, setActionTodoId] = useState<string>('');
-  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth > 375 ? false : true);
+  const [isSortControlsExternal, setIsSortControlsExternal] = useState<boolean>(window.innerWidth > 375 ? false : true);
   const { userId } = useAppSelector((state: RootState) => state.user);
   const { todoList, isLoading, isError, updateDb, sortOrder } = useAppSelector((state: RootState) => state.todos);
   const reduxDispatch = useAppDispatch();
@@ -50,24 +50,29 @@ const TodoListPage: FC<TodoListPageProps> = () => {
     reduxDispatch(setTodosSortOrder({ sortOrder }));
     reduxDispatch(setTodosSortOrderToDbThunk({ userId, sortOrder }));
   };
+  const openModalHandler = () => {
+    setIsModalActive(true);
+    document.body.style.overflow = 'hidden';
+  };
   const closeModalHandler = () => {
     setIsModalActive(false);
+    document.body.style.overflow = 'scroll';
   };
   const deleteBtnHandler = (todoId: string, todoTitle: string) => {
     setActionTodoType(ActionsWithTodos.DELETE);
     setActionTodoTitle(todoTitle);
     setActionTodoId(todoId);
-    setIsModalActive(true);
+    openModalHandler();
   };
   const clrCompletedBtnHandler = () => {
     setActionTodoType(ActionsWithTodos.CLRCOMPLETED);
-    setIsModalActive(true);
+    openModalHandler();
   };
   const editTodoHandler = (todoId: string, todoTitle: string) => {
     setActionTodoType(ActionsWithTodos.EDIT);
     setActionTodoTitle(todoTitle);
     setActionTodoId(todoId);
-    setIsModalActive(true);
+    openModalHandler();
   };
   const acceptBtnHandler = (e: SyntheticEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
@@ -89,14 +94,14 @@ const TodoListPage: FC<TodoListPageProps> = () => {
       setActionTodoId('');
     }
     setActionTodoType('');
-    setIsModalActive(false);
+    closeModalHandler();
   };
   const rejectBtnHandler = (e: SyntheticEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
     setActionTodoType('');
     setActionTodoTitle('');
     setActionTodoId('');
-    setIsModalActive(false);
+    closeModalHandler();
   };
   const updateTodos = (todoList: ITodoItem[]) => {
     reduxDispatch(updateTodoList(todoList));
@@ -107,11 +112,7 @@ const TodoListPage: FC<TodoListPageProps> = () => {
 
   useEffect(() => {
     const screenResizeHandler = () => {
-      if (window.innerWidth > 768) {
-        setIsMobile(false);
-      } else {
-        setIsMobile(true);
-      }
+      window.innerWidth > 768 ? setIsSortControlsExternal(false) : setIsSortControlsExternal(true);
     };
 
     screenResizeHandler();
@@ -139,7 +140,7 @@ const TodoListPage: FC<TodoListPageProps> = () => {
           <TodoList
             todos = {todoList}
             todosSortOrder = {sortOrder}
-            isMobile = {isMobile}
+            isSortControlsExternal = {isSortControlsExternal}
             isTouchDevice = {isTouchDevice}
             isDraggable = {true}
             toggleCheckBoxHandler = {toggleCheckBoxHandler}

@@ -83,3 +83,10 @@ export interface IRectOffsets {
   xOffset: number;
   yOffset: number;
 }
+
+export interface ITouchDuration {
+  touchStartEvtTime: number,
+  isFirstTouchMoveEvt: boolean,
+  touchMoveFirstEvtTime: number,
+  touchMoveStartDelay: number,
+}

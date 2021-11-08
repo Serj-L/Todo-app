@@ -22,7 +22,7 @@ const Modal: FC<ModalProps> = ({
       <div className={styles.modalWrapper}>
         <div className={styles.modal}>
           <div className={styles.modalHeader}>
-            <h2 className={styles.modalTitle}>{modalTitle}</h2>
+            <h3 className={styles.modalTitle}>{modalTitle}</h3>
             <button
               className={styles.btnClose}
               onClick = {closeModalHandler}

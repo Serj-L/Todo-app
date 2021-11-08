@@ -1,3 +1,7 @@
+.checkBoxWrapper {
+  flex-shrink: 0;
+}
+
 .checkIconWrapper {
   display: flex;
   position: absolute;

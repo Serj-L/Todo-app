@@ -16,7 +16,7 @@ const CustomCheckbox: FC<CustomCheckboxProps> = ({
 }) => {
 
   return (
-    <>
+    <div className={styles.checkBoxWrapper}>
       <input
         className={styles.checkBox}
         data-is-touch-device={isTouchDevice}
@@ -32,7 +32,7 @@ const CustomCheckbox: FC<CustomCheckboxProps> = ({
       >
         {isChecked && <div className={styles.checkIconWrapper}><CheckIcon /></div>}
       </label>
-    </>
+    </div>
   );
 };
 
