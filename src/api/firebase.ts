@@ -6,12 +6,12 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { IUserLoginInput, IFirebaseLoginResponse, ITodoListSetToDb, ITodosSortOrderSetToDb, TodosSortOrder } from '../types/types';
 
 export const firebaseApp = initializeApp({
-  apiKey: 'AIzaSyDGmhjDViXDcauYtXU6H7BJkmGekgJCfcg',
-  authDomain: 'todo-list-app-bb89a.firebaseapp.com',
-  projectId: 'todo-list-app-bb89a',
-  storageBucket: 'todo-list-app-bb89a.appspot.com',
-  messagingSenderId: '958201388501',
-  appId: '1:958201388501:web:a3538848f5df0a77bcb15c',
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
 });
 
 export const dataBase = getFirestore();
