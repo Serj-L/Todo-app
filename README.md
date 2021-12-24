@@ -35,18 +35,19 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://github.com/Serj-L/Todo-app)
-- Live Site URL: [Add live site URL here](https://serj-l.github.io/Todo-app)
+- [Solution URL](https://github.com/Serj-L/Todo-app)
+- [Live Site URL](https://serj-l.github.io/Todo-app)
 
 ## My process
 
 ### Built with
 
-- Semantic HTML5 markup
-- CSS custom properties
+- HTML5 markup
+- CSS modules and custom properties
 - Flexbox
-- [React](https://reactjs.org/) - JS library
-- [Firebase](https://firebase.google.com/) -
+- [React](https://reactjs.org/)
+- [Redux-toolkit](https://redux-toolkit.js.org/)
+- [Firebase](https://firebase.google.com/)
 
 ### What I learned
 
